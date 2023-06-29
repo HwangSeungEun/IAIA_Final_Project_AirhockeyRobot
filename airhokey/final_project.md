@@ -366,7 +366,6 @@ The original plan was to use a deep learning model to segment the Puck and predi
       ```
 
 3. **Camera Settings:**
-
    1. Install the camera on the profile fixed to the table. If the camera is not fixed, accurate object recognition cannot be achieved.
 
    2. In **camera.py**, apply the camera index number between 0 and 2 in the corresponding section to select the camera to use. If a flickering camera image appears, it means that it is an IR camera, not the main camera, and you should change to a different index.
