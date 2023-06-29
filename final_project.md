@@ -37,13 +37,13 @@ The primary objective was set to predict the moving path of an object using imag
 
 - Camera  sensor : Logitech Brio 4K (EA : 1)
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/4fba1e99-0299-42ec-b9b3-9479097881b8" alt="image" style="zoom: 33%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/4fba1e99-0299-42ec-b9b3-9479097881b8" alt="image" style="zoom: 50%;" />
 
 <center><strong>Figure 1. Logitech Brio 4K</strong></center>
 
 - Robot arm : indy 10 (EA : 1)
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/db905399-5634-4a32-9872-03d43c2cc7a8" alt="image" style="zoom: 25%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/db905399-5634-4a32-9872-03d43c2cc7a8" alt="image" style="zoom: 33%;" />
 
 <center><strong>Figure 2. Indy 10 Robot Arm</strong></center>
 
@@ -58,7 +58,7 @@ The primary objective was set to predict the moving path of an object using imag
 
 3D modeling was conducted using Fusion 360. The size of the robot arm's bracket was measured in real world, and modeling was done accordingly to create the handle.
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/556c4dad-de95-46b4-a35b-26ed7ac3c39c" alt="image" style="zoom:50%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/556c4dad-de95-46b4-a35b-26ed7ac3c39c" alt="image" style="zoom: 67%;" />
 
 <center><strong>Figure 3. Air Hockey Peddle 3D Model</strong></center>
 
@@ -68,7 +68,7 @@ The primary objective was set to predict the moving path of an object using imag
 
 We purchased and used an air hockey table in the 300,000 won range. A table appropriate for the height of Indy 10 was selected. Considering the speed of the robot, we purchased a product with a vertical length of more than 150cm.
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/4e3ffd42-2178-48a4-9c35-9f479365e358" alt="image" style="zoom: 50%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/4e3ffd42-2178-48a4-9c35-9f479365e358" alt="image" style="zoom: 67%;" />
 
 <center><strong>Figure 4. Air Hockey Table</strong></center>
 
@@ -76,7 +76,7 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 
 - Vacuum gripper
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/61b24f2d-f939-4d01-a2ca-20f4eed9da9a" alt="image" style="zoom: 33%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/61b24f2d-f939-4d01-a2ca-20f4eed9da9a" alt="image" style="zoom: 50%;" />
 
 <center><strong>Figure 5. Vacuum Gripper</strong></center>
 
@@ -94,13 +94,13 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 
 ### 3.2. System flow chart
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/72a88420-0398-4e77-be71-06e181436dbf" alt="image" style="zoom: 50%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/72a88420-0398-4e77-be71-06e181436dbf" alt="image" style="zoom: 33%;" />
 
 <center><strong>Figure 6. Flow Chart</strong></center>
 
 ### 3.3. System process
 
-![image](https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/704f67b4-ded5-4567-948b-3e47e3565c40)
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/704f67b4-ded5-4567-948b-3e47e3565c40" alt="image" style="zoom: 33%;" />
 
 - The camera continuously calculates the segmentation information of the puck.
 - The destination the robot should go to is transmitted via a publisher flag.
@@ -111,7 +111,7 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 
 ![image](https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/adc91cd9-eb17-4d6c-85a3-9771d0d5a60d)
 
-<center><strong>Figure 7. Robot Axes</strong></center>
+<center><strong>Figure 7. Robot Axis</strong></center>
 
  There are three types of movements for the robot: absolute coordinate commands (x, y, z, roll, pitch, yaw), relative coordinate commands (x, y, z, roll, pitch, yaw), and joint commands (limit radian for each joint) which were used in our experiment.
 
@@ -279,6 +279,8 @@ cd catkin_ws
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/561a726c-e7da-42c0-a24b-4ff06e609197" alt="image" style="zoom:67%;" />
 
+<center><strong>Figure 9. Program Excute</strong></center>
+
 A total of four windows and a camera window will be opened. The provided image shows the two important terminals and the displayed camera.
 
 
@@ -417,9 +419,10 @@ chmod +x airhockey.sh
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/88666fcb-dfc7-412c-b467-83e66c5ca9ef" alt="image" style="zoom:30%;" /><img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/ab57c561-4b83-4514-b7fb-9f56894f177d" alt="image" style="zoom:30%;" />
 
-
+<center><strong>Figure 10. Game Setting 1</strong></center>
 
 2. Place the puck in the circle in the center and enjoy the game by hitting it.
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/27dac51e-e8ad-432f-93a7-e3969d7934bc" alt="image" style="zoom: 30%;" /><img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/adefeaef-80f6-4bc7-ba92-d95f9bac2662" alt="image" style="zoom:30%;" />
 
+<center><strong>Figure 10. Game Setting 2</strong></center>
