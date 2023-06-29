@@ -37,13 +37,13 @@ The primary objective was set to predict the moving path of an object using imag
 
 - Camera  sensor : Logitech Brio 4K (EA : 1)
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/4fba1e99-0299-42ec-b9b3-9479097881b8" alt="image" style="zoom:50%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/4fba1e99-0299-42ec-b9b3-9479097881b8" alt="image" style="zoom: 33%;" />
 
 <center><strong>Figure 1. Logitech Brio 4K</strong></center>
 
 - Robot arm : indy 10 (EA : 1)
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/db905399-5634-4a32-9872-03d43c2cc7a8" alt="image" style="zoom: 33%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/db905399-5634-4a32-9872-03d43c2cc7a8" alt="image" style="zoom: 25%;" />
 
 <center><strong>Figure 2. Indy 10 Robot Arm</strong></center>
 
@@ -58,7 +58,7 @@ The primary objective was set to predict the moving path of an object using imag
 
 3D modeling was conducted using Fusion 360. The size of the robot arm's bracket was measured in real world, and modeling was done accordingly to create the handle.
 
-![image](https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/556c4dad-de95-46b4-a35b-26ed7ac3c39c)
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/556c4dad-de95-46b4-a35b-26ed7ac3c39c" alt="image" style="zoom:50%;" />
 
 <center><strong>Figure 3. Air Hockey Peddle 3D Model</strong></center>
 
@@ -68,7 +68,7 @@ The primary objective was set to predict the moving path of an object using imag
 
 We purchased and used an air hockey table in the 300,000 won range. A table appropriate for the height of Indy 10 was selected. Considering the speed of the robot, we purchased a product with a vertical length of more than 150cm.
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/4e3ffd42-2178-48a4-9c35-9f479365e358" alt="image" style="zoom: 80%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/4e3ffd42-2178-48a4-9c35-9f479365e358" alt="image" style="zoom: 50%;" />
 
 <center><strong>Figure 4. Air Hockey Table</strong></center>
 
@@ -76,7 +76,7 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 
 - Vacuum gripper
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/61b24f2d-f939-4d01-a2ca-20f4eed9da9a" alt="image" style="zoom:50%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/61b24f2d-f939-4d01-a2ca-20f4eed9da9a" alt="image" style="zoom: 33%;" />
 
 <center><strong>Figure 5. Vacuum Gripper</strong></center>
 
@@ -303,7 +303,7 @@ The original plan was to use a deep learning model to segment the Puck and predi
 
 ### 7.1. Download the Source File from GitHub
 
-1.  Download the file from the provided GitHub repository [git-hub link](https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot.git).
+1. Download the file from the provided GitHub repository [git-hub link](https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot.git).
 
 2. After decompressing the downloaded file, move the **airhockey.sh** file located in the **airhoceky** folder to **catkin_ws**. Move folders with the prefix indy to **/catkin_ws/src**.
 
