@@ -1,3 +1,5 @@
+
+
 # Byung-Ji Robot (Air-Hockey penalty kick)
 
 **Instructor :** prof. Young-Keun Kim
@@ -107,11 +109,111 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 - When the robot receives location information via a subscriber, the robot moves.
 - When the robot moves, once it receives a flag indicating the movement is complete, the robot is ready to receive the next location.
 
-### 3.4. Robot manipulation
+
+
+### 3.4. Image Processing
+
+#### 3.4.1 Detection of Puck
+
+이미지 처리 알고리즘은 다음과 같다. 파란색 puck을 HSV color segmentation을 활용하여 contour를 얻는다. 하키 테이블과 프로파일로 고정된 카메라의 거리는 일정하기 때문에 퍽의 사이즈도 일정하다. 퍽의 인식률을 높이기 위해 contour의 크기를 200이상 380이하로 제한하여 측정한다.
+
+```python
+for cnt in contours:
+    area = cv.contourArea(cnt)
+    # filter outlier contours
+
+    if 200 <= area <= 380:
+        self.x, self.y, w, h = cv.boundingRect(cnt)
+```
+
+
+
+#### 3.4.2. Trajectory
+
+ 로봇의 작동 속도 및 ROS를 통한 데이터 전송 속도가 느리기 때문에 puck의 경로를 초반에 예측해야 한다. puck이 인식된 후 특정 조건이 만족하면 경로를 그리도록 설정하였다. puck이 5 frame이상 중점이 인식될 때, 중심점의 좌표가 특정 속도 이상으로 이동할 때, 이미지상 양의 x축 방향으로 이동할 때 경로를 그리도록 했다. 
+
+```python
+if self.previous_position is not (0,0) and x_move >= 3 and move_distance >= 4.5:
+    if self.x > 120:
+        self.puck_move = True
+        self.slope_avg((self.current_position[1] - self.previous_position[1]) / (self.current_position[0] - self.previous_position[0]))
+else:
+    self.puck_move = False
+```
+
+
+
+puck의 다섯 frame동안의 평균 이동을 계산 후 기울기 값을 계산한다. 그리고 5번째 frame에서의 x, y 좌표를 경로 생성 지점으로 지정하고 예측 경로를 그리게 된다. 또한 기울기가 양의 기울기 음의 기울기가 존재하기 때문에 두가지 경우도 나누어서 진행을 한다
+
+```python
+# If puck is moving
+if self.puck_move == True and len(self.slope_list) > 0 and self.path_drawn == False: 
+
+    if self.slope != 0 and self.slope < 0:
+        predicted_x = self.previous_position[0] + (roi_y1 - self.previous_position[1]) / self.slope 
+    elif self.slope != 0 and self.slope > 0:
+        predicted_x = self.previous_position[0] + (roi_y2 - self.previous_position[1]) / self.slope 
+    else:
+        predicted_x = self.previous_position[0]
+```
+
+<img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/663c8d71-1215-4eaf-a9ba-7c0ef3d47b40" alt="image" style="zoom:33%;" />
+
+<center><strong>Figure 7. Concept Image </strong></center>
+
+#### 3.4.3 Reflect of Puck Trajectory
+
+퍽이 3.4.2 에서 평균 기울기와 마지막 점이 존재하기 때문에 일차 함수와 같이 직선을 그릴 수 있다. 퍽이 직진만 하는 것이 아니라 벽에 한번 혹은 그 이상 부딪힐 수 있기 때문에 그에 대한 계산을 진행한다.
+
+퍽의 입사각과 반사각이 동일하다고 가정하여 진행하였지만 하키 테이블의 벽은 마찰력이 충분하지 않기 때문에 입사각에 비해 반사각은 크기가 작아지게 된다. 
+
+입사각 반사각도 모두 같은 비율로 줄어들지 않는다는 것을 누적된 실험을 통해 경험했다. 입사각이 큰 경우에는 입사각과 반사각이 0.7 ~ 0.8 만큼 줄어들지만, 입사각이 작을 때는 0.4배정도 작아지는 것을 확인했다. (이때 파라미터를 곱하는 것은 각도에 곱하는 것이 아닌 기울기에 적용하였다)
+
+<img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/12ce74d5-1e47-43b1-b6fc-279800ed00f8" alt="image" style="zoom:50%;" />
+
+<center><strong>Figure 8. Reflect of Puck</strong></center>
+
+puck의 예측 경로가 벽에 닿으면 그 지점을 두번째 출발점으로 잡고 위에서 줄어든 기울기 만큼 계산하여 다시 선을 그리게 된다. 우리 알고리즘에서는 총 두번의 벽 튕김을 고려하였다. 그 이유는 3번 이상 튕길 때는 로봇이 위치하고 있는 지역까지 puck이 안오는 경우가 대부분이었기 때문이다.
+
+
+
+#### 3.4.4. Robot Flag
+
+ 예측 경로의 끝 부분이 아래 사진에 의 영역에 도달을 하면 해당하는 flag를 로봇에게 전달하게 된다. 그리고 로봇은 3.5.에 flag 위치로 이동하여 게임이 진행된다. 
+
+<img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/7800bd3f-7407-4f62-9bb1-66f503a286f7" alt="image" style="zoom: 50%;" />
+
+<center><strong>Figure 9. Fleg Area </strong></center>
+
+#### 3.4.5. Trajectory Remove
+
+경로가 그려진 후 이전에 있던 경로를 초기화 해준다. 조건은 이미지 좌표 기준 -x 방향 특정 pixel거리만큼 이동을 할 때 초기화를 한다.
+
+```python
+# Reset slope list and drawn paths if object moves left more than -3
+if x_move < -3:
+    self.slope_list = []
+    self.path_line = None
+    self.reflected_path_line = None
+    self.path_drawn = False
+    self.extra_reflected_path_line = None 
+```
+
+
+
+#### 3.4.6. Goal Flag
+
+Fig 9에 보이는 흰색 박스를 지나서, 그 후 puck의 contour가 200초 동안 contour가 인식되지 않으면 goal  flag가 작동하고 화면에 --You Win-- 의 문구가 나온다. goal이 들어가면 로봇은 Fig 10. Goal Post Basket 로 이동후 vacuum gripper를 이용해 puck을 꺼내게 된다. 400초가 지나면 --You Win-- 문구가 사라지고 다시 게임을 처음부터 진행할 수 있게 된다.
+
+<img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/d08fe474-a498-4058-9648-0f37165dfde3" alt="image" style="zoom: 50%;" />
+
+<center><strong>Figure 10. Goal Post Basket  </strong></center>
+
+### 3.5. Robot manipulation
 
 ![image](https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/adc91cd9-eb17-4d6c-85a3-9771d0d5a60d)
 
-<center><strong>Figure 7. Robot Axis</strong></center>
+<center><strong>Figure 11. Robot Axis</strong></center>
 
  There are three types of movements for the robot: absolute coordinate commands (x, y, z, roll, pitch, yaw), relative coordinate commands (x, y, z, roll, pitch, yaw), and joint commands (limit radian for each joint) which were used in our experiment.
 
@@ -166,7 +268,7 @@ elif self.flag == 4:
 
 
 
-### 3.5. Robot speed control
+### 3.6. Robot speed control
 
 Due to Indy 10 being a cooperative robot, the speed of the robot's actuator is slow. Therefore, speed configuration is required. As the speed function within ROS does not allow for changes in speed, we referred to the corresponding code in the documentation of the robot manufacturer, Neuromeka, on their website.
 
@@ -217,7 +319,7 @@ Demo Video : [Click here](https://www.youtube.com/watch?v=lsEivK4yrS4)
 
 <img src="https://github.com/HanMinung/Robotarm_Automation/assets/91367451/4e2c83c3-3102-46e3-912f-824f06262b65" alt="image" style="zoom:67%;" />
 
-<center><strong>Figure 8. Example of operation</strong></center>
+<center><strong>Figure 12. Example of operation</strong></center>
 
 <strong>Table 1. Attempt Result</strong>
 
@@ -279,7 +381,7 @@ cd catkin_ws
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/561a726c-e7da-42c0-a24b-4ff06e609197" alt="image" style="zoom:67%;" />
 
-<center><strong>Figure 9. Program Excute</strong></center>
+<center><strong>Figure 13. Program Excute</strong></center>
 
 A total of four windows and a camera window will be opened. The provided image shows the two important terminals and the displayed camera.
 
@@ -419,10 +521,10 @@ chmod +x airhockey.sh
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/88666fcb-dfc7-412c-b467-83e66c5ca9ef" alt="image" style="zoom:30%;" /><img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/ab57c561-4b83-4514-b7fb-9f56894f177d" alt="image" style="zoom:30%;" />
 
-<center><strong>Figure 10. Game Setting 1</strong></center>
+<center><strong>Figure 14. Game Setting 1</strong></center>
 
 2. Place the puck in the circle in the center and enjoy the game by hitting it.
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/27dac51e-e8ad-432f-93a7-e3969d7934bc" alt="image" style="zoom: 30%;" /><img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/adefeaef-80f6-4bc7-ba92-d95f9bac2662" alt="image" style="zoom:30%;" />
 
-<center><strong>Figure 10. Game Setting 2</strong></center>
+<center><strong>Figure 15. Game Setting 2</strong></center>
