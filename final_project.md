@@ -88,7 +88,7 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 
 ## 3. **Process**
 
-### 3.1. Process structure
+### 3.1. Process Structure
 
  The structure of the program consists of two parts: image processing and robot operation. In the camera, segmentation was carried out using HSV, and the expected path was calculated based on the position change according to the frame change of the detected object. The average slope of the object's position change was used to predict the angle of incidence and reflection of the Puck. The robot area is divided into three parts: left, center, and right. Depending on which area the end point of the predicted path is located, a movement Flag is passed to the robot. If an object crosses the goal line and is not detected for a certain number of frames, it is judged that a goal has been scored, and a Flag for the robot to pick up the Puck is passed.
 
@@ -96,13 +96,13 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 
 
 
-### 3.2. System flow chart
+### 3.2. System Flow Chart
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/72a88420-0398-4e77-be71-06e181436dbf" alt="image" style="zoom: 33%;" />
 
 <center><strong>Figure 6. Flow Chart</strong></center>
 
-### 3.3. System process
+### 3.3. Entire System Process
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/704f67b4-ded5-4567-948b-3e47e3565c40" alt="image" style="zoom: 33%;" />
 
@@ -179,7 +179,7 @@ If the predicted trajectory of the puck intersects the wall, this intersection p
 
 When the end of the predicted trajectory reaches the area depicted in the image below, a corresponding flag is sent to the robot. The robot then moves to the position dictated by the flag, as described in Section 3.5, and the game continues.
 
-<img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/7800bd3f-7407-4f62-9bb1-66f503a286f7" alt="image" style="zoom: 50%;" />
+<img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/974303bf-543c-4365-945f-a1721f372638" alt="image" style="zoom:50%;" />
 
 <center><strong>Figure 9. Area of Fleg  </strong></center>
 
@@ -207,7 +207,7 @@ If the puck passes the white box shown in Figure 9 and the contour of the puck i
 
 <center><strong>Figure 10. Goal Post Basket  </strong></center>
 
-### 3.5. Robot manipulation
+### 3.5. Robot Manipulation
 
 ![image](https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/adc91cd9-eb17-4d6c-85a3-9771d0d5a60d)
 
@@ -266,15 +266,13 @@ elif self.flag == 4:
 
 
 
-### 3.6. Robot speed control
+### 3.6. Robot Speed Control
 
 Due to Indy 10 being a cooperative robot, the speed of the robot's actuator is slow. Therefore, speed configuration is required. As the speed function within ROS does not allow for changes in speed, we referred to the corresponding code in the documentation of the robot manufacturer, Neuromeka, on their website.
 
 [neuromeka docs](http://docs.neuromeka.com/3.0.0/kr/Python/section1/)
 
 The robot's speed can be set from 1 to 9. We set it to the fastest speed, and after setting it to 9, we were able to proceed with a simple game.
-
-
 
 **indy_set_velocity.py**
 
@@ -331,7 +329,7 @@ Demo Video : [Click here](https://www.youtube.com/watch?v=lsEivK4yrS4)
 
 
 
-## 5. Multi process shell script management
+## 5. Multi Process Shell Script Management
 
 This project involves the inconvenience of running multiple files simultaneously. Even if it is a single program, difficulties arise in the progression of the program if the order is mixed up or if certain files are not executed. Therefore, the aim is to resolve this inconvenience by executing only one shell script file.
 
@@ -385,7 +383,7 @@ A total of four windows and a camera window will be opened. The provided image s
 
 
 
-## 6. Discussion and analysis
+## 6. Discussion and Analysis
 
 1. **Issues with Robots and ROS**
 
