@@ -115,7 +115,7 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 
 #### 3.4.1 Detection of Puck
 
-이미지 처리 알고리즘은 다음과 같다. 파란색 puck을 HSV color segmentation을 활용하여 contour를 얻는다. 하키 테이블과 프로파일로 고정된 카메라의 거리는 일정하기 때문에 퍽의 사이즈도 일정하다. 퍽의 인식률을 높이기 위해 contour의 크기를 200이상 380이하로 제한하여 측정한다.
+The image processing algorithm proceeds as follows: The blue puck is detected by employing HSV color segmentation to obtain its contour. As the distance between the camera, which is fixed in position and profile, and the hockey table is constant, the size of the puck remains uniform. To enhance the detection rate of the puck, the contour area is restricted between 200 and 380 units.
 
 ```python
 for cnt in contours:
@@ -128,9 +128,9 @@ for cnt in contours:
 
 
 
-#### 3.4.2. Trajectory
+#### 3.4.2. Trajectory Prediction
 
- 로봇의 작동 속도 및 ROS를 통한 데이터 전송 속도가 느리기 때문에 puck의 경로를 초반에 예측해야 한다. puck이 인식된 후 특정 조건이 만족하면 경로를 그리도록 설정하였다. puck이 5 frame이상 중점이 인식될 때, 중심점의 좌표가 특정 속도 이상으로 이동할 때, 이미지상 양의 x축 방향으로 이동할 때 경로를 그리도록 했다. 
+Due to the slow operating speed of the robot and data transmission rate through ROS, it is imperative to predict the trajectory of the puck early on. The algorithm is set to draw the trajectory once the puck has been detected and specific conditions are met: the center of the puck is detected for more than 5 frames, the coordinates of the center move at a certain speed, and the puck moves in the positive x-direction on the image.
 
 ```python
 if self.previous_position is not (0,0) and x_move >= 3 and move_distance >= 4.5:
@@ -141,9 +141,7 @@ else:
     self.puck_move = False
 ```
 
-
-
-puck의 다섯 frame동안의 평균 이동을 계산 후 기울기 값을 계산한다. 그리고 5번째 frame에서의 x, y 좌표를 경로 생성 지점으로 지정하고 예측 경로를 그리게 된다. 또한 기울기가 양의 기울기 음의 기울기가 존재하기 때문에 두가지 경우도 나누어서 진행을 한다
+The average movement of the puck is calculated over five frames, and the slope is computed. The x and y coordinates in the fifth frame are designated as the point for trajectory creation and the predicted trajectory is drawn. Furthermore, as there can be positive and negative slopes, the algorithm proceeds separately for both cases.
 
 ```python
 # If puck is moving
@@ -161,33 +159,31 @@ if self.puck_move == True and len(self.slope_list) > 0 and self.path_drawn == Fa
 
 <center><strong>Figure 7. Concept Image </strong></center>
 
-#### 3.4.3 Reflect of Puck Trajectory
+#### 3.4.3 Adjustment of Puck Trajectory Reflection
 
-퍽이 3.4.2 에서 평균 기울기와 마지막 점이 존재하기 때문에 일차 함수와 같이 직선을 그릴 수 있다. 퍽이 직진만 하는 것이 아니라 벽에 한번 혹은 그 이상 부딪힐 수 있기 때문에 그에 대한 계산을 진행한다.
+Since there exists an average slope and a final point, as described in Section 3.4.2, the trajectory can be represented as a straight line akin to a linear equation. However, the puck might not solely travel in a straight path but may bounce off the walls one or more times, and these reflections need to be accounted for.
 
-퍽의 입사각과 반사각이 동일하다고 가정하여 진행하였지만 하키 테이블의 벽은 마찰력이 충분하지 않기 때문에 입사각에 비해 반사각은 크기가 작아지게 된다. 
+While assuming that the angle of incidence is equal to the angle of reflection, it is observed that the walls of the hockey table do not have sufficient friction; thus, the angle of reflection is smaller than the angle of incidence.
 
-입사각 반사각도 모두 같은 비율로 줄어들지 않는다는 것을 누적된 실험을 통해 경험했다. 입사각이 큰 경우에는 입사각과 반사각이 0.7 ~ 0.8 만큼 줄어들지만, 입사각이 작을 때는 0.4배정도 작아지는 것을 확인했다. (이때 파라미터를 곱하는 것은 각도에 곱하는 것이 아닌 기울기에 적용하였다)
+Through extensive experimentation, it was noted that the reduction in the angles was not uniform. When the angle of incidence was high, both angles decreased by about 0.7 to 0.8 times, but when the angle of incidence was small, they decreased to around 0.4 times (Note that this factor was applied to the slope, not the angle).
 
 <img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/12ce74d5-1e47-43b1-b6fc-279800ed00f8" alt="image" style="zoom:50%;" />
 
 <center><strong>Figure 8. Reflect of Puck</strong></center>
 
-puck의 예측 경로가 벽에 닿으면 그 지점을 두번째 출발점으로 잡고 위에서 줄어든 기울기 만큼 계산하여 다시 선을 그리게 된다. 우리 알고리즘에서는 총 두번의 벽 튕김을 고려하였다. 그 이유는 3번 이상 튕길 때는 로봇이 위치하고 있는 지역까지 puck이 안오는 경우가 대부분이었기 때문이다.
-
-
+If the predicted trajectory of the puck intersects the wall, this intersection point is used as the new starting point, and the line is redrawn with the reduced slope. The algorithm accounts for two wall bounces. This is because, in most cases, the puck does not reach the region where the robot is positioned if it bounces more than twice.
 
 #### 3.4.4. Robot Flag
 
- 예측 경로의 끝 부분이 아래 사진에 의 영역에 도달을 하면 해당하는 flag를 로봇에게 전달하게 된다. 그리고 로봇은 3.5.에 flag 위치로 이동하여 게임이 진행된다. 
+When the end of the predicted trajectory reaches the area depicted in the image below, a corresponding flag is sent to the robot. The robot then moves to the position dictated by the flag, as described in Section 3.5, and the game continues.
 
 <img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/7800bd3f-7407-4f62-9bb1-66f503a286f7" alt="image" style="zoom: 50%;" />
 
 <center><strong>Figure 9. Fleg Area </strong></center>
 
-#### 3.4.5. Trajectory Remove
+#### 3.4.5. Trajectory Removal
 
-경로가 그려진 후 이전에 있던 경로를 초기화 해준다. 조건은 이미지 좌표 기준 -x 방향 특정 pixel거리만큼 이동을 할 때 초기화를 한다.
+Once the trajectory is drawn, the algorithm resets any previously drawn trajectory. The criteria for resetting is when the object moves a specific pixel distance in the negative x-direction with respect to the image coordinates.
 
 ```python
 # Reset slope list and drawn paths if object moves left more than -3
