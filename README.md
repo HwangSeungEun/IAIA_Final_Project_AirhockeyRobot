@@ -12,6 +12,8 @@
 
 -----
 
+[TOC]
+
 ## 1. Introduction
 
 This Repository includes a **Tutorial** for the final project of the Industrial AI & Automation course conducted in the first semester of 2023 at Handong Global University, namely, the **Robot Byeong-Gi (Airhockey Robot)**.
@@ -37,13 +39,13 @@ The primary objective was set to predict the moving path of an object using imag
 
 - Camera  sensor : Logitech Brio 4K (EA : 1)
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/4fba1e99-0299-42ec-b9b3-9479097881b8" alt="image" style="zoom: 33%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/4fba1e99-0299-42ec-b9b3-9479097881b8" alt="image" style="zoom: 50%;" />
 
 <center><strong>Figure 1. Logitech Brio 4K</strong></center>
 
 - Robot arm : indy 10 (EA : 1)
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/db905399-5634-4a32-9872-03d43c2cc7a8" alt="image" style="zoom: 25%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/db905399-5634-4a32-9872-03d43c2cc7a8" alt="image" style="zoom: 33%;" />
 
 <center><strong>Figure 2. Indy 10 Robot Arm</strong></center>
 
@@ -58,7 +60,7 @@ The primary objective was set to predict the moving path of an object using imag
 
 3D modeling was conducted using Fusion 360. The size of the robot arm's bracket was measured in real world, and modeling was done accordingly to create the handle.
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/556c4dad-de95-46b4-a35b-26ed7ac3c39c" alt="image" style="zoom:50%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/556c4dad-de95-46b4-a35b-26ed7ac3c39c" alt="image" style="zoom: 67%;" />
 
 <center><strong>Figure 3. Air Hockey Peddle 3D Model</strong></center>
 
@@ -68,7 +70,7 @@ The primary objective was set to predict the moving path of an object using imag
 
 We purchased and used an air hockey table in the 300,000 won range. A table appropriate for the height of Indy 10 was selected. Considering the speed of the robot, we purchased a product with a vertical length of more than 150cm.
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/4e3ffd42-2178-48a4-9c35-9f479365e358" alt="image" style="zoom: 50%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91419683/4e3ffd42-2178-48a4-9c35-9f479365e358" alt="image" style="zoom: 67%;" />
 
 <center><strong>Figure 4. Air Hockey Table</strong></center>
 
@@ -76,7 +78,7 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 
 - Vacuum gripper
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/61b24f2d-f939-4d01-a2ca-20f4eed9da9a" alt="image" style="zoom: 33%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/61b24f2d-f939-4d01-a2ca-20f4eed9da9a" alt="image" style="zoom: 50%;" />
 
 <center><strong>Figure 5. Vacuum Gripper</strong></center>
 
@@ -84,7 +86,7 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 
 ## 3. **Process**
 
-### 3.1. Process structure
+### 3.1. Process Structure
 
  The structure of the program consists of two parts: image processing and robot operation. In the camera, segmentation was carried out using HSV, and the expected path was calculated based on the position change according to the frame change of the detected object. The average slope of the object's position change was used to predict the angle of incidence and reflection of the Puck. The robot area is divided into three parts: left, center, and right. Depending on which area the end point of the predicted path is located, a movement Flag is passed to the robot. If an object crosses the goal line and is not detected for a certain number of frames, it is judged that a goal has been scored, and a Flag for the robot to pick up the Puck is passed.
 
@@ -92,26 +94,181 @@ We purchased and used an air hockey table in the 300,000 won range. A table appr
 
 
 
-### 3.2. System flow chart
+### 3.2. System Flow Chart
 
-<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/72a88420-0398-4e77-be71-06e181436dbf" alt="image" style="zoom: 50%;" />
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/72a88420-0398-4e77-be71-06e181436dbf" alt="image" style="zoom: 33%;" />
 
 <center><strong>Figure 6. Flow Chart</strong></center>
 
-### 3.3. System process
+### 3.3. Entire System Process
 
-![image](https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/704f67b4-ded5-4567-948b-3e47e3565c40)
+<img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/704f67b4-ded5-4567-948b-3e47e3565c40" alt="image" style="zoom: 33%;" />
 
 - The camera continuously calculates the segmentation information of the puck.
 - The destination the robot should go to is transmitted via a publisher flag.
 - When the robot receives location information via a subscriber, the robot moves.
 - When the robot moves, once it receives a flag indicating the movement is complete, the robot is ready to receive the next location.
 
-### 3.4. Robot manipulation
+
+
+### 3.4. Image Processing
+
+#### 3.4.1 Detection of Puck
+
+The image processing algorithm proceeds as follows: The blue puck is detected by employing HSV color segmentation to obtain its contour. As the distance between the camera, which is fixed in position and profile, and the hockey table is constant, the size of the puck remains uniform. To enhance the detection rate of the puck, the contour area is restricted between 200 and 380 units.
+
+```python
+for cnt in contours:
+    area = cv.contourArea(cnt)
+    # filter outlier contours
+
+    if 200 <= area <= 380:
+        self.x, self.y, w, h = cv.boundingRect(cnt)
+```
+
+
+
+#### 3.4.2. Trajectory Prediction
+
+Due to the slow operating speed of the robot and data transmission rate through ROS, it is imperative to predict the trajectory of the puck early on. The algorithm is set to draw the trajectory once the puck has been detected and specific conditions are met: the center of the puck is detected for more than 5 frames, the coordinates of the center move at a certain speed, and the puck moves in the positive x-direction on the image.
+
+```python
+if self.previous_position is not (0,0) and x_move >= 3 and move_distance >= 4.5:
+    if self.x > 120:
+        self.puck_move = True
+        self.slope_avg((self.current_position[1] - self.previous_position[1]) / (self.current_position[0] - self.previous_position[0]))
+else:
+    self.puck_move = False
+```
+
+The average movement of the puck is calculated over five frames, and the slope is computed. The x and y coordinates in the fifth frame are designated as the point for trajectory creation and the predicted trajectory is drawn. Furthermore, as there can be positive and negative slopes, the algorithm proceeds separately for both cases.
+
+```python
+# If puck is moving
+if self.puck_move == True and len(self.slope_list) > 0 and self.path_drawn == False: 
+
+    if self.slope != 0 and self.slope < 0:
+        predicted_x = self.previous_position[0] + (roi_y1 - self.previous_position[1]) / self.slope 
+    elif self.slope != 0 and self.slope > 0:
+        predicted_x = self.previous_position[0] + (roi_y2 - self.previous_position[1]) / self.slope 
+    else:
+        predicted_x = self.previous_position[0]
+```
+
+<img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/663c8d71-1215-4eaf-a9ba-7c0ef3d47b40" alt="image" style="zoom:33%;" />
+
+<center><strong>Figure 7. Concept Image </strong></center>
+
+#### 3.4.3 Adjustment of Puck Trajectory Reflection
+
+Since there exists an average slope and a final point, as described in Section 3.4.2, the trajectory can be represented as a straight line akin to a linear equation. However, the puck might not solely travel in a straight path but may bounce off the walls one or more times, and these reflections need to be accounted for.
+
+While assuming that the angle of incidence is equal to the angle of reflection, it is observed that the walls of the hockey table do not have sufficient friction; thus, the angle of reflection is smaller than the angle of incidence.
+
+Through extensive experimentation, it was noted that the reduction in the angles was not uniform. When the angle of incidence was high, both angles decreased by about 0.7 to 0.8 times, but when the angle of incidence was small, they decreased to around 0.4 times (Note that this factor was applied to the slope, not the angle).
+
+<img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/12ce74d5-1e47-43b1-b6fc-279800ed00f8" alt="image" style="zoom:50%;" />
+
+<center><strong>Figure 8. Reflect of Puck</strong></center>
+
+If the predicted trajectory of the puck intersects the wall, this intersection point is used as the new starting point, and the line is redrawn with the reduced slope. The algorithm accounts for two wall bounces. This is because, in most cases, the puck does not reach the region where the robot is positioned if it bounces more than twice.
+
+```python
+if self.hit_border is not None and predicted_x != roi_x2:
+    if self.slope != 0:
+        if 0 <= abs(self.slope) <= 1.5:
+           self.slope = self.slope * 0.4 
+        if 1.5 < self.slope <= 5:
+           self.slope = self.slope * 0.7
+        if -5 < self.slope <= -1.5:
+           self.slope = self.slope * 0.8
+
+        self.reflected_y2 = self.hit_border - self.slope  * (roi_x2 - self.current_position[0])
+        self.reflected_x2 = self.current_position[0] + (self.reflected_y2 - self.hit_border) / -self.slope 
+
+        # when hit the borders                                    
+        if self.reflected_y2 >= roi_y2 and self.reflected_x2 <= roi_x2:
+            self.reflected_y2 = roi_y2
+            self.reflected_x2 = self.current_position[0] + (self.reflected_y2 - self.hit_border) / -self.slope # * 1.2 
+
+        if self.reflected_y2 <= roi_y1 and self.reflected_x2 <= roi_x2:
+            self.reflected_y2 = roi_y1
+            self.reflected_x2 = self.current_position[0] + (self.reflected_y2 - self.hit_border) / -self.slope
+
+    if self.reflected_x2 is not None and self.reflected_y2 is not None:
+        self.reflected_path_line =[[int(predicted_x), int(predicted_y2)], [int(self.reflected_x2), int(self.reflected_y2)]]
+        # print(self.reflected_path_line)
+
+        self.reflected_path_line = list(self.reflected_path_line)
+        # print(self.reflected_path_line)
+
+    else:
+        self.reflected_path_line = None
+
+if self.reflected_x2 is not None:   
+    self.reflected_x2 = round(self.reflected_x2,3)  
+
+else:
+    self.reflected_path_line = None
+
+if self.reflected_y2 is not None:
+    self.hit_border2 = roi_y1 if self.reflected_y2 == roi_y1 else roi_y2
+
+if self.hit_border2 is not None and self.reflected_x2 != roi_x2:
+    self.reflected_x3 = roi_x2
+    self.reflected_y3_temp = self.hit_border2 + self.slope *  (roi_x2 - self.reflected_x2)  # reflection
+
+    # self.reflected_y3_temp will be bounded by the ROI borders
+    self.reflected_y3 = max(roi_y1, min(roi_y2, self.reflected_y3_temp))
+
+    self.extra_reflected_path_line = [[int(self.reflected_x2), int(self.reflected_y2)], [int(self.reflected_x3), int(self.reflected_y3)]]
+    print(self.path_line)
+    print(self.reflected_path_line)
+    print(self.extra_reflected_path_line)
+
+else:
+    self.extra_reflected_path_line = None
+```
+
+
+
+#### 3.4.4. Robot Flag
+
+When the end of the predicted trajectory reaches the area depicted in the image below, a corresponding flag is sent to the robot. The robot then moves to the position dictated by the flag, as described in Section 3.5, and the game continues.
+
+<img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/974303bf-543c-4365-945f-a1721f372638" alt="image" style="zoom:50%;" />
+
+<center><strong>Figure 9. Area of Fleg  </strong></center>
+
+#### 3.4.5. Trajectory Removal
+
+Once the trajectory is drawn, the algorithm resets any previously drawn trajectory. The criteria for resetting is when the object moves a specific pixel distance in the negative x-direction with respect to the image coordinates.
+
+```python
+# Reset slope list and drawn paths if object moves left more than -3
+if x_move < -3:
+    self.slope_list = []
+    self.path_line = None
+    self.reflected_path_line = None
+    self.path_drawn = False
+    self.extra_reflected_path_line = None 
+```
+
+
+
+#### 3.4.6. Goal Flag Activation
+
+If the puck passes the white box shown in Figure 9 and the contour of the puck is not detected for 200 frames, the goal flag is activated and a “--You Win--” message is displayed on the screen. Upon a goal, the robot moves to the position shown in Figure 10, Goal Post Basket, and uses a vacuum gripper to retrieve the puck. After 400 frames, the “--You Win--” message disappears and the game can be restarted from the beginning.
+
+<img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/d08fe474-a498-4058-9648-0f37165dfde3" alt="image" style="zoom: 50%;" />
+
+<center><strong>Figure 10. Goal Post Basket  </strong></center>
+
+### 3.5. Robot Manipulation
 
 ![image](https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/adc91cd9-eb17-4d6c-85a3-9771d0d5a60d)
 
-<center><strong>Figure 7. Robot Axes</strong></center>
+<center><strong>Figure 11. Robot Axis</strong></center>
 
  There are three types of movements for the robot: absolute coordinate commands (x, y, z, roll, pitch, yaw), relative coordinate commands (x, y, z, roll, pitch, yaw), and joint commands (limit radian for each joint) which were used in our experiment.
 
@@ -166,15 +323,13 @@ elif self.flag == 4:
 
 
 
-### 3.5. Robot speed control
+### 3.6. Robot Speed Control
 
 Due to Indy 10 being a cooperative robot, the speed of the robot's actuator is slow. Therefore, speed configuration is required. As the speed function within ROS does not allow for changes in speed, we referred to the corresponding code in the documentation of the robot manufacturer, Neuromeka, on their website.
 
 [neuromeka docs](http://docs.neuromeka.com/3.0.0/kr/Python/section1/)
 
 The robot's speed can be set from 1 to 9. We set it to the fastest speed, and after setting it to 9, we were able to proceed with a simple game.
-
-
 
 **indy_set_velocity.py**
 
@@ -217,7 +372,7 @@ Demo Video : [Click here](https://www.youtube.com/watch?v=lsEivK4yrS4)
 
 <img src="https://github.com/HanMinung/Robotarm_Automation/assets/91367451/4e2c83c3-3102-46e3-912f-824f06262b65" alt="image" style="zoom:67%;" />
 
-<center><strong>Figure 8. Example of operation</strong></center>
+<center><strong>Figure 12. Example of operation</strong></center>
 
 <strong>Table 1. Attempt Result</strong>
 
@@ -231,7 +386,7 @@ Demo Video : [Click here](https://www.youtube.com/watch?v=lsEivK4yrS4)
 
 
 
-## 5. Multi process shell script management
+## 5. Multi Process Shell Script Management
 
 This project involves the inconvenience of running multiple files simultaneously. Even if it is a single program, difficulties arise in the progression of the program if the order is mixed up or if certain files are not executed. Therefore, the aim is to resolve this inconvenience by executing only one shell script file.
 
@@ -279,11 +434,13 @@ cd catkin_ws
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/561a726c-e7da-42c0-a24b-4ff06e609197" alt="image" style="zoom:67%;" />
 
+<center><strong>Figure 13. Program Excute</strong></center>
+
 A total of four windows and a camera window will be opened. The provided image shows the two important terminals and the displayed camera.
 
 
 
-## 6. Discussion and analysis
+## 6. Discussion and Analysis
 
 1. **Issues with Robots and ROS**
 
@@ -418,9 +575,10 @@ chmod +x airhockey.sh
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/88666fcb-dfc7-412c-b467-83e66c5ca9ef" alt="image" style="zoom:30%;" /><img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/ab57c561-4b83-4514-b7fb-9f56894f177d" alt="image" style="zoom:30%;" />
 
-
+<center><strong>Figure 14. Game Setting 1</strong></center>
 
 2. Place the puck in the circle in the center and enjoy the game by hitting it.
 
 <img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/27dac51e-e8ad-432f-93a7-e3969d7934bc" alt="image" style="zoom: 30%;" /><img src="https://github.com/DongminKim21800064/IAIA_Project2_RobotSonny/assets/91474647/adefeaef-80f6-4bc7-ba92-d95f9bac2662" alt="image" style="zoom:30%;" />
 
+<center><strong>Figure 15. Game Setting 2</strong></center>
