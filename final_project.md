@@ -175,6 +175,65 @@ Through extensive experimentation, it was noted that the reduction in the angles
 
 If the predicted trajectory of the puck intersects the wall, this intersection point is used as the new starting point, and the line is redrawn with the reduced slope. The algorithm accounts for two wall bounces. This is because, in most cases, the puck does not reach the region where the robot is positioned if it bounces more than twice.
 
+```python
+if self.hit_border is not None and predicted_x != roi_x2:
+    if self.slope != 0:
+        if 0 <= abs(self.slope) <= 1.5:
+           self.slope = self.slope * 0.4 
+        if 1.5 < self.slope <= 5:
+           self.slope = self.slope * 0.7
+        if -5 < self.slope <= -1.5:
+           self.slope = self.slope * 0.8
+
+        self.reflected_y2 = self.hit_border - self.slope  * (roi_x2 - self.current_position[0])
+        self.reflected_x2 = self.current_position[0] + (self.reflected_y2 - self.hit_border) / -self.slope 
+
+        # when hit the borders                                    
+        if self.reflected_y2 >= roi_y2 and self.reflected_x2 <= roi_x2:
+            self.reflected_y2 = roi_y2
+            self.reflected_x2 = self.current_position[0] + (self.reflected_y2 - self.hit_border) / -self.slope # * 1.2 
+
+        if self.reflected_y2 <= roi_y1 and self.reflected_x2 <= roi_x2:
+            self.reflected_y2 = roi_y1
+            self.reflected_x2 = self.current_position[0] + (self.reflected_y2 - self.hit_border) / -self.slope
+
+    if self.reflected_x2 is not None and self.reflected_y2 is not None:
+        self.reflected_path_line =[[int(predicted_x), int(predicted_y2)], [int(self.reflected_x2), int(self.reflected_y2)]]
+        # print(self.reflected_path_line)
+
+        self.reflected_path_line = list(self.reflected_path_line)
+        # print(self.reflected_path_line)
+
+    else:
+        self.reflected_path_line = None
+
+if self.reflected_x2 is not None:   
+    self.reflected_x2 = round(self.reflected_x2,3)  
+
+else:
+    self.reflected_path_line = None
+
+if self.reflected_y2 is not None:
+    self.hit_border2 = roi_y1 if self.reflected_y2 == roi_y1 else roi_y2
+
+if self.hit_border2 is not None and self.reflected_x2 != roi_x2:
+    self.reflected_x3 = roi_x2
+    self.reflected_y3_temp = self.hit_border2 + self.slope *  (roi_x2 - self.reflected_x2)  # reflection
+
+    # self.reflected_y3_temp will be bounded by the ROI borders
+    self.reflected_y3 = max(roi_y1, min(roi_y2, self.reflected_y3_temp))
+
+    self.extra_reflected_path_line = [[int(self.reflected_x2), int(self.reflected_y2)], [int(self.reflected_x3), int(self.reflected_y3)]]
+    print(self.path_line)
+    print(self.reflected_path_line)
+    print(self.extra_reflected_path_line)
+
+else:
+    self.extra_reflected_path_line = None
+```
+
+
+
 #### 3.4.4. Robot Flag
 
 When the end of the predicted trajectory reaches the area depicted in the image below, a corresponding flag is sent to the robot. The robot then moves to the position dictated by the flag, as described in Section 3.5, and the game continues.
