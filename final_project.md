@@ -14,6 +14,8 @@
 
 -----
 
+[TOC]
+
 ## 1. Introduction
 
 This Repository includes a **Tutorial** for the final project of the Industrial AI & Automation course conducted in the first semester of 2023 at Handong Global University, namely, the **Robot Byeong-Gi (Airhockey Robot)**.
@@ -179,7 +181,7 @@ When the end of the predicted trajectory reaches the area depicted in the image 
 
 <img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/7800bd3f-7407-4f62-9bb1-66f503a286f7" alt="image" style="zoom: 50%;" />
 
-<center><strong>Figure 9. Fleg Area </strong></center>
+<center><strong>Figure 9. Area of Fleg  </strong></center>
 
 #### 3.4.5. Trajectory Removal
 
@@ -197,9 +199,9 @@ if x_move < -3:
 
 
 
-#### 3.4.6. Goal Flag
+#### 3.4.6. Goal Flag Activation
 
-Fig 9에 보이는 흰색 박스를 지나서, 그 후 puck의 contour가 200초 동안 contour가 인식되지 않으면 goal  flag가 작동하고 화면에 --You Win-- 의 문구가 나온다. goal이 들어가면 로봇은 Fig 10. Goal Post Basket 로 이동후 vacuum gripper를 이용해 puck을 꺼내게 된다. 400초가 지나면 --You Win-- 문구가 사라지고 다시 게임을 처음부터 진행할 수 있게 된다.
+If the puck passes the white box shown in Figure 9 and the contour of the puck is not detected for 200 frames, the goal flag is activated and a “--You Win--” message is displayed on the screen. Upon a goal, the robot moves to the position shown in Figure 10, Goal Post Basket, and uses a vacuum gripper to retrieve the puck. After 400 frames, the “--You Win--” message disappears and the game can be restarted from the beginning.
 
 <img src="https://github.com/HwangSeungEun/IAIA_Final_Project_AirhockeyRobot/assets/91474647/d08fe474-a498-4058-9648-0f37165dfde3" alt="image" style="zoom: 50%;" />
 
